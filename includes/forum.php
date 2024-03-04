@@ -985,17 +985,17 @@ class AsgarosForum {
 			$unread_status = $this->unread->get_status_forum($forum->id, $count_topics);
 
 			echo '<div class="content-element forum" id="forum-'.esc_attr($forum->id).'">';
-				$forum_icon = trim(esc_html(stripslashes($forum->icon)));
-				$forum_icon = (empty($forum_icon)) ? 'fas fa-comments' : $forum_icon;
-                $forum_link = $this->get_link('forum', absint($forum->id));
+            $forum_icon = trim(esc_html(stripslashes($forum->icon)));
+            $forum_icon = (empty($forum_icon)) ? 'fas fa-comments' : $forum_icon;
+            $forum_link = $this->get_link('forum', absint($forum->id));
 
-				echo '<div class="forum-status '.esc_attr($unread_status).'">';
-                    echo '<i class="'.esc_attr($forum_icon).'"></i>';
+                echo '<div class="forum-status '.esc_attr($unread_status).'">';
+                echo '<a href="'.esc_url($forum_link).'"><i class="'.esc_attr($forum_icon).'"></i></a>';
                 echo '</div>';
-				echo '<div class="forum-name">';
-					echo '<a class="forum-title" href="'.esc_url($forum_link).'">';
-                        echo esc_html(stripslashes($forum->name));
-                    echo '</a>';
+                echo '<div class="forum-name">';
+                echo '<a class="forum-title" href="'.esc_url($forum_link).'">';
+                echo esc_html(stripslashes($forum->name));
+                echo '</a>';
 
 					// Show the description of the forum when it is not empty.
 					$forum_description = stripslashes($forum->description);
@@ -1045,10 +1045,11 @@ class AsgarosForum {
         $lastpost_data = $this->get_lastpost_in_topic($topic_object->id);
         $unread_status = $this->unread->get_status_topic($topic_object->id);
         $topic_title   = esc_html(stripslashes($topic_object->name));
-
+    
         echo '<div class="content-element topic '.esc_attr($topic_type).'">';
-            echo '<div class="topic-status '.esc_attr($unread_status).'"><i class="far fa-comments"></i></div>';
-            echo '<div class="topic-name">';
+        echo '<div class="topic-status '.esc_attr($unread_status).'"><a href="'.esc_url($this->get_link('topic', absint($topic_object->id))).'"><i class="far fa-comments"></i></a></div>';
+        echo '<div class="topic-name">';
+        
                 if ($this->is_topic_sticky($topic_object->id)) {
                     echo '<span class="topic-icon fas fa-thumbtack" title="'.esc_attr__('This topic is pinned', 'asgaros-forum').'"></span>';
                 }
@@ -1594,9 +1595,10 @@ class AsgarosForum {
             } else {
                 // Avatar
                 if ($this->options['enable_avatars']) {
-                    echo '<div class="forum-poster-avatar">'.get_avatar($lastpost->author_id, 40, '', '', array('force_display' => true)).'</div>';
+                    $avatar_html = get_avatar($lastpost->author_id, 40, '', '', array('force_display' => true));
+                    echo '<div class="forum-poster-avatar"><a href="'.esc_url($post_link).'">'.$avatar_html.'</a></div>';
                 }
-
+                
                 // Summary
                 echo '<div class="forum-poster-summary">';
                 echo '<a href="'.esc_url($post_link).'">'.esc_html($this->cut_string(stripslashes($lastpost->name), 25)).'</a><br>';
